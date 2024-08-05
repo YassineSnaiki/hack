@@ -47,6 +47,25 @@ async function createDatabase() {
       )
     `);
 
+
+
+
+    // Create Speakers table
+        await connection.query(`
+          CREATE TABLE IF NOT EXISTS Speakers (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            nom VARCHAR(100),
+            prenom VARCHAR(100),
+            description TEXT,
+            evenement_id INT,
+            image_url TEXT,
+            FOREIGN KEY (evenement_id) REFERENCES Evenements(id)
+          )
+        `);
+    
+
+    
+
     const [events] = await connection.query(
       "SELECT COUNT(*) AS count FROM evenements"
     );
@@ -71,30 +90,88 @@ INSERT INTO Evenements (titre, apercu, description, image_url, date_debut, date_
 
 ('Olive Harvest Tour', 'Guided tour of an olive grove.', 'Experience the beauty and tranquility of an olive grove during the harvest season. This guided tour will take participants through the entire olive harvesting process, from picking to pressing. The tour includes a visit to a traditional olive mill, where guests can observe the extraction of olive oil. Participants will learn about different olive varieties, harvesting techniques, and the importance of sustainable practices in olive farming. The tour will conclude with a tasting session, where guests can sample freshly pressed olive oil and other olive-based products.', '/img/event8.jpg', '2024-09-20', '2024-09-22', '08:00:00', 'Olive Grove', '["8:00 AM - Meet at Entrance", "8:30 AM - Grove Tour", "10:00 AM - Mill Visit", "11:00 AM - Tasting"]', 'Wear comfortable walking shoes.', 'Suitable for all ages; great for families and nature lovers.', 'Please arrive 15 minutes early; bring your own water bottle.');
 
+      INSERT INTO Speakers (nom, prenom, description, evenement_id, image_url) VALUES
+      ('Garcia', 'Carlos', 'Olive farmer and local expert on traditional harvesting techniques.', 1, 'https://i.pravatar.cc/48?u=118836'),
+      ('Haddad', 'Leila', 'Culinary expert specializing in olive-based dishes.', 1, 'https://i.pravatar.cc/48?u=118837'),
+      ('Brown', 'Emily', 'Cultural historian with a focus on Mediterranean festivals.', 1, 'https://i.pravatar.cc/48?u=118838'),
+      ('Alvarado', 'Maria', 'Local producer of olive products.', 1, 'https://i.pravatar.cc/48?u=118839'),
+  
+      ('Rossi', 'Gianni', 'Expert in olive oil production and tasting.', 2, 'https://i.pravatar.cc/48?u=118840'),
+      ('Martin', 'Sophie', 'Food scientist specializing in olive oil quality analysis.', 2, 'https://i.pravatar.cc/48?u=118841'),
+      ('Ahmad', 'Yasmine', 'Agricultural engineer with a focus on olive cultivation.', 2, 'https://i.pravatar.cc/48?u=118842'),
+      ('Silva', 'Rafael', 'Olive oil sommelier.', 2, 'https://i.pravatar.cc/48?u=118843'),
+  
+      ('Patel', 'Anil', 'Environmentalist and expert in sustainable agriculture.', 3, 'https://i.pravatar.cc/48?u=118844'),
+      ('Lopez', 'Miguel', 'Arborist specializing in olive trees.', 3, 'https://i.pravatar.cc/48?u=118845'),
+      ('Chen', 'Mei', 'Community organizer and advocate for urban greening.', 3, 'https://i.pravatar.cc/48?u=118846'),
+      ('Novak', 'Katarina', 'Educator on the ecological benefits of olive trees.', 3, 'https://i.pravatar.cc/48?u=118847'),
+  
+      ('Johnson', 'Michael', 'Chef and expert in olive-based recipes.', 4, 'https://i.pravatar.cc/48?u=118848'),
+      ('Berardi', 'Laura', 'Olive oil producer with a focus on organic products.', 4, 'https://i.pravatar.cc/48?u=118849'),
+      ('Abdullah', 'Sara', 'Historian with expertise in the culinary history of olives.', 4, 'https://i.pravatar.cc/48?u=118850'),
+      ('Kumar', 'Raj', 'Food critic and author specializing in Mediterranean cuisine.', 4, 'https://i.pravatar.cc/48?u=118851');
   `);
 
-    // Create Programmes table
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS programmes (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      jour DATE NOT NULL,
+      evenement_id INT,
+      plan JSON,
+      FOREIGN KEY (evenement_id) REFERENCES Evenements(id)
+    )
+  `);
+  
+  const [programmes] = await connection.query("SELECT COUNT(*) AS count FROM programmes");
+  const programmesCount = programmes[0].count;
+  
+  if (programmesCount === 0) {
+    // Insert data into programmes table with all 15 speakers
     await connection.query(`
-      CREATE TABLE IF NOT EXISTS Programmes (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        jour DATE,
-        description TEXT,
-        evenement_id INT,
-        FOREIGN KEY (evenement_id) REFERENCES Evenements(id)
-      )
+      INSERT INTO programmes (jour, evenement_id, plan) VALUES
+      ('2024-08-05', 1, '[
+        {"activity": "Opening Ceremony", "time": "9:00 AM", "speaker_id": 1},
+        {"activity": "Olive Picking", "time": "10:30 AM", "speaker_id": 2},
+        {"activity": "Lunch", "time": "1:00 PM", "speaker_id": 3},
+        {"activity": "Olive Oil Tasting", "time": "2:30 PM", "speaker_id": 4}
+      ]'),
+      ('2024-08-06', 1, '[
+        {"activity": "Introduction", "time": "2:00 PM", "speaker_id": 5},
+        {"activity": "Olive Oil Tasting", "time": "2:30 PM", "speaker_id": 6},
+        {"activity": "Pressing Demonstration", "time": "3:30 PM", "speaker_id": 7}
+      ]'),
+      ('2024-09-05', 3, '[
+        {"activity": "Registration", "time": "9:00 AM", "speaker_id": 8},
+        {"activity": "Planting Instructions", "time": "9:30 AM", "speaker_id": 9},
+        {"activity": "Tree Planting", "time": "10:00 AM", "speaker_id": 10},
+        {"activity": "Lunch", "time": "12:00 PM", "speaker_id": 11}
+      ]'),
+      ('2024-09-06', 3, '[
+        {"activity": "Mulching Instructions", "time": "2:00 PM", "speaker_id": 12},
+        {"activity": "Watering", "time": "3:00 PM", "speaker_id": 13},
+        {"activity": "Wrap-Up", "time": "4:00 PM", "speaker_id": 14}
+      ]'),
+      ('2024-10-01', 4, '[
+        {"activity": "Cooking Demonstration", "time": "10:00 AM", "speaker_id": 15},
+        {"activity": "Recipe Sharing", "time": "11:00 AM", "speaker_id": 1},
+        {"activity": "Tasting Session", "time": "12:00 PM", "speaker_id": 2}
+      ]'),
+      ('2024-10-02', 4, '[
+        {"activity": "Panel Discussion", "time": "2:00 PM", "speaker_id": 3},
+        {"activity": "Q&A Session", "time": "3:00 PM", "speaker_id": 4}
+      ]'),
+      ('2024-11-01', 5, '[
+        {"activity": "Reception", "time": "7:00 PM", "speaker_id": 5},
+        {"activity": "Dinner", "time": "7:30 PM", "speaker_id": 6},
+        {"activity": "Live Music", "time": "8:30 PM", "speaker_id": 7},
+        {"activity": "Auction", "time": "10:00 PM", "speaker_id": 8}
+      ]'),
+      ('2024-11-02', 5, '[
+        {"activity": "Silent Auction Begins", "time": "10:00 AM", "speaker_id": 9},
+        {"activity": "Auction Closes", "time": "2:00 PM", "speaker_id": 10}
+      ]')
     `);
-
-    // Create Speakers table
-    await connection.query(`
-      CREATE TABLE IF NOT EXISTS Speakers (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nom VARCHAR(100),
-        prenom VARCHAR(100),
-        description TEXT,
-        evenement_id INT,
-        FOREIGN KEY (evenement_id) REFERENCES Evenements(id)
-      )
-    `);
+  }
 
     // Create Sponsors table
     await connection.query(`

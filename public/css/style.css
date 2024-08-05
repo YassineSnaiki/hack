@@ -315,6 +315,16 @@ a {
 .testimonial-carousel .owl-item.center .testimonial-item * {
   transition: 0.5s;
 }
+.speaker-item {
+  height: 200px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.speaker-item h5 {
+  font-size: 16px;
+}
 
 .testimonial-item {
   display: flex;
