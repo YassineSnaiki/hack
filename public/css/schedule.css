@@ -295,3 +295,10 @@
         left: 0; }
       .box-style .row .item:nth-child(3):hover ~ .indicator {
         left: 66.6666666%; } }
+      
+@media(max-width : 991px) {
+  .schedule-tabs-item .schedule-listing-item.schedule-left {
+    margin-top: 0;
+  }
+
+}

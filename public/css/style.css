@@ -226,7 +226,6 @@ color:#EAEAEA}
 
 .header-carousel .owl-nav .owl-prev:hover,
 .header-carousel .owl-nav .owl-next:hover {
-  background: ;
   border-color: var(--primary);
 }
 
@@ -443,3 +442,4 @@ color:#EAEAEA}
   padding-right: 0;
   border-right: none;
 }
+

@@ -75,7 +75,6 @@ module.exports.showEventPage = async (req, res) => {
         });
       }
     }
-    log(dayWiseProgrammes);
     if (event) {
       res.render("event", { event, speakers, uniqueDays, dayWiseProgrammes });
     } else {
