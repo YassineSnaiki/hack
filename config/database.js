@@ -5,7 +5,8 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   host: "localhost",
   user: "root",
-  password: "admin",
+  password: "pass24ch",
+  database : "users_db",
   multipleStatements: true,
 });
 

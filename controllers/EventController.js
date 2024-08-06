@@ -2,6 +2,9 @@ const { body, validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs").promises;
 const Event = require("../models/Event");
+const Speaker = require("../models/Speaker");
+const Program = require("../models/Program");
+const { log } = require("console");
 
 // Show all events page
 module.exports.showEventsPage = async (req, res) => {
@@ -25,7 +28,6 @@ module.exports.showHomePage = async (req, res) => {
     const newsFilePath = path.join(__dirname, "../data/news.json"); // Adjust the path if needed
     const newsData = await fs.readFile(newsFilePath, "utf8");
     const newsArray = JSON.parse(newsData);
-    console.log(newsArray);
 
     // Render the home page with both events and news data
     res.render("home", { events, news: newsArray });
@@ -41,8 +43,40 @@ module.exports.showEventPage = async (req, res) => {
   const { id } = req.params; // Use req.params for route parameters
   try {
     const event = await Event.getEventById(id);
+    const speakers = await Speaker.getByEventId(id);
+    const programmes = await Program.getByEventId(id);
+
+    // Extract unique days
+    const uniqueDays = [...new Set(programmes.map((program) => program.jour))];
+
+    const dayWiseProgrammes = {};
+    for (let programme of programmes) {
+      const day = programme.jour;
+      if (!dayWiseProgrammes[day]) {
+        dayWiseProgrammes[day] = [];
+      }
+
+      // Parse the plan JSON
+      const activities = programme.plan;
+
+      for (let activity of activities) {
+        const speaker = await Speaker.getById(activity.speaker_id);
+        dayWiseProgrammes[day].push({
+          activity: activity.activity,
+          time: activity.time,
+          speakerName: `${speaker.nom} ${speaker.prenom}`,
+          speakerImage: speaker.image_url,
+        });
+        dayWiseProgrammes[day].sort((a, b) => {
+          // You may need to implement a more specific time parsing/comparison if needed
+          return (
+            new Date("1970/01/01 " + a.time) - new Date("1970/01/01 " + b.time)
+          );
+        });
+      }
+    }
     if (event) {
-      res.render("event", { event });
+      res.render("event", { event, speakers, uniqueDays, dayWiseProgrammes });
     } else {
       req.flash("error_msg", "Event not found.");
       res.redirect("/events");
