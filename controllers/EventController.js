@@ -4,6 +4,7 @@ const fs = require("fs").promises;
 const Event = require("../models/Event");
 const Speaker = require("../models/Speaker");
 const Program = require("../models/Program");
+const Candidature = require("../models/Candidature");
 const { log } = require("console");
 
 // Show all events page
@@ -75,8 +76,23 @@ module.exports.showEventPage = async (req, res) => {
         });
       }
     }
+
+    let candidatureExists = false;
+    if (req.user) {
+      const user_id = req.user.id;
+      const existingCandidature = await Candidature.getByUserIdAndEventId(user_id, id);
+      candidatureExists = existingCandidature.length > 0;
+    }
+
     if (event) {
-      res.render("event", { event, speakers, uniqueDays, dayWiseProgrammes });
+      res.render("event", { 
+        event, 
+        user: req.user, 
+        speakers, 
+        uniqueDays, 
+        dayWiseProgrammes,
+        candidatureExists // Pass the candidature status to the view
+      });
     } else {
       req.flash("error_msg", "Event not found.");
       res.redirect("/events");
@@ -87,7 +103,6 @@ module.exports.showEventPage = async (req, res) => {
     res.redirect("/events");
   }
 };
-
 // Add a new event
 module.exports.addEvent = [
   body("titre")

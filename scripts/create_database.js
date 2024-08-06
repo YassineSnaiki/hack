@@ -252,6 +252,8 @@ if (sponsorsCount === 0) {
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT UNSIGNED,
         evenement_id INT,
+        nombre_visiteur INT, 
+        commentaire TEXT,
         statut ENUM('en attente', 'accepte', 'refuse'),
         FOREIGN KEY (user_id) REFERENCES users(id),
         FOREIGN KEY (evenement_id) REFERENCES Evenements(id)
