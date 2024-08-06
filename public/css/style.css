@@ -433,3 +433,37 @@ color:#EAEAEA}
   padding-right: 0;
   border-right: none;
 }
+/* :::::::::::::::::::::::::::::::::: */
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+}
+
+.hover-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    /* background-color: #E8DAB2; */
+    backdrop-filter: blur(50px);
+     width: 80%;
+    height: 70%;
+    padding: 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    text-align: center;
+}
+
+.image-container:hover .hover-text,
+.image-container.clicked .hover-text {
+    opacity: 0.9;
+    pointer-events: auto;
+}

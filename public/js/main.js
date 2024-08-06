@@ -79,3 +79,13 @@
     
 })(jQuery);
 
+document.addEventListener('DOMContentLoaded', function() {
+    const imageContainers = document.querySelectorAll('.image-container');
+
+    imageContainers.forEach(container => {
+        container.addEventListener('click', function() {
+            imageContainers.forEach(c => c.classList.remove('clicked'));
+            this.classList.add('clicked');
+        });
+    });
+});
