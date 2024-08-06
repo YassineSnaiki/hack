@@ -212,6 +212,39 @@ INSERT INTO Evenements (titre, apercu, description, image_url, date_debut, date_
         FOREIGN KEY (evenement_id) REFERENCES Evenements(id)
       )
     `);
+    const [sponsors] = await connection.query("SELECT COUNT(*) AS count FROM sponsors");
+const sponsorsCount = sponsors[0].count;
+
+if (sponsorsCount === 0) {
+  await connection.query(`
+    INSERT INTO Sponsors (nom, description, evenement_id) VALUES
+    ('OliveCo', 'Leading producer of olive products.', 1),
+    ('Green Farms', 'Sustainable agriculture and organic produce.', 1),
+    ('Healthy Oils', 'Premium olive oil manufacturer.', 1),
+    
+    ('Gourmet Kitchen', 'Specialty food and kitchen supplies.', 2),
+    ('PureOlive', 'Organic olive oil and products.', 2),
+    
+    ('EcoGreen', 'Environmental sustainability initiatives.', 3),
+    ('PlantLife', 'Supporting urban green spaces.', 3),
+    
+    ('TasteMaster', 'Culinary experiences and events.', 4),
+    ('OliveExpert', 'Olive product specialists.', 4),
+    
+    ('OliveDelights', 'Olive-based gourmet products.', 5),
+    ('CulinaryArts', 'Culinary education and experiences.', 5),
+    
+    ('HealthBites', 'Health and wellness through diet.', 6),
+    ('FoodLab', 'Innovative culinary techniques.', 6),
+    
+    ('HistoryBuff', 'Promoting historical knowledge and education.', 7),
+    ('CultureConnect', 'Connecting people through cultural events.', 7),
+    
+    ('NatureWalk', 'Promoting outdoor experiences.', 8),
+    ('FarmFresh', 'Farm-to-table produce and experiences.', 8)
+  `);
+}
+
 
     // Create Candidatures table
     await connection.query(`
