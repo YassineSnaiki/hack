@@ -25,6 +25,9 @@ class Event {
     }
   }
 
+
+  
+
   static async addEvent(
     titre,
     apercu,
@@ -34,14 +37,13 @@ class Event {
     date_fin,
     time,
     lieu,
-    plan,
     observations,
     participation,
     info_add
   ) {
     try {
       await pool.query(
-        "INSERT INTO Evenements (titre, apercu, description, image_url, date_debut, date_fin, time, lieu, plan, observations, participation, info_add) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO Evenements (titre, apercu, description, image_url, date_debut, date_fin, time, lieu, observations, participation, info_add) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           titre,
           apercu,
@@ -51,63 +53,77 @@ class Event {
           date_fin,
           time,
           lieu,
-          plan ? JSON.stringify(plan) : null,
           observations,
           participation,
           info_add,
         ]
       );
     } catch (err) {
+      console.error("Database error:", err); // Log the actual database error
       throw new Error("An error occurred while adding the event.");
     }
   }
+  
+// In Event.js (or your model file)
 
-  static async updateEvent(
-    id,
-    titre,
-    apercu,
-    description,
-    image_url,
-    date_debut,
-    date_fin,
-    time,
-    lieu,
-    plan,
-    observations,
-    participation,
-    info_add
-  ) {
-    try {
-      await pool.query(
-        "UPDATE Evenements SET titre = ?, apercu = ?, description = ?, image_url = ?, date_debut = ?, date_fin = ?, time = ?, lieu = ?, plan = ?, observations = ?, participation = ?, info_add = ? WHERE id = ?",
-        [
-          titre,
-          apercu,
-          description,
-          image_url,
-          date_debut,
-          date_fin,
-          time,
-          lieu,
-          plan ? JSON.stringify(plan) : null,
-          observations,
-          participation,
-          info_add,
-          id,
-        ]
-      );
-    } catch (err) {
-      throw new Error("An error occurred while updating the event.");
-    }
+static async deleteEvent(id) {
+  try {
+    await pool.query('DELETE FROM Evenements WHERE id = ?', [id]);
+  } catch (err) {
+    console.error("Database error:", err);
+    throw new Error("An error occurred while deleting the event.");
   }
+}
 
-  static async deleteEvent(id) {
-    try {
-      await pool.query("DELETE FROM Evenements WHERE id = ?", [id]);
-    } catch (err) {
-      throw new Error("An error occurred while deleting the event.");
-    }
+
+
+
+// Event.js (Model)
+
+static async updateEvent(
+  id,
+  titre,
+  apercu,
+  description,
+  image_url,
+  date_debut,
+  date_fin,
+  time,
+  lieu,
+  observations,
+  participation,
+  info_add
+) {
+  try {
+    await pool.query(
+      `UPDATE Evenements SET
+        titre = ?, apercu = ?, description = ?, image_url = ?,
+        date_debut = ?, date_fin = ?, time = ?, lieu = ?,
+        observations = ?, participation = ?, info_add = ?
+      WHERE id = ?`,
+      [
+        titre,
+        apercu,
+        description,
+        image_url,
+        date_debut,
+        date_fin,
+        time,
+        lieu,
+        observations,
+        participation,
+        info_add,
+        id,
+      ]
+    );
+  } catch (err) {
+    console.error("Database error:", err);
+    throw new Error("An error occurred while updating the event.");
   }
+}
+
+
+
 }
 
 module.exports = Event;
