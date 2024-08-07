@@ -39,12 +39,10 @@
           <div class="text-start ps-4">
             <h3 class="mb-3"><%=event.titre%></h3>
             <span class="text-truncate me-3"
-              ><i class="fa fa-map-marker-alt text-primary me-2"></i
-              ><%=event.lieu%></span
+              ><i class="fa fa-map-marker-alt text-primary me-2"></i><%=event.lieu%></span
             >
             <span class="text-truncate me-3"
-              ><i class="far fa-clock text-primary me-2"></i
-              ><%=event.time%></span
+              ><i class="far fa-clock text-primary me-2"></i><%=event.time%></span
             >
             <span class="text-truncate me-0"
               ><i class="far fa-calendar-alt text-primary me-2"></i
@@ -347,6 +345,8 @@
       message = "Événement fini";
       textColor = "red"; // Color for finished event
       document.getElementById("countdown-timer").innerHTML = message;
+      document.getElementById("countdown-timer").style.color = textColor;
+      document.querySelector('form').style.display = 'none'; // Hide the participation form
       return;
     }
 
@@ -374,6 +374,7 @@
   // Update the countdown every second
   setInterval(updateCountdown, 1000);
 </script>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>

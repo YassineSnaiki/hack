@@ -5,7 +5,20 @@ const Event = require("../models/Event");
 const Speaker = require("../models/Speaker");
 const Program = require("../models/Program");
 const Candidature = require("../models/Candidature");
-const { log } = require("console");
+const multer = require('multer');
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/img');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
+  }
+});
+
+const upload = multer({ storage: storage });
+
 
 // Show all events page
 module.exports.showEventsPage = async (req, res) => {
@@ -103,26 +116,51 @@ module.exports.showEventPage = async (req, res) => {
     res.redirect("/events");
   }
 };
-// Add a new event
+const validateTime = (value) => {
+  return !value || /^([01]\d|2[0-3]):([0-5]\d)$/.test(value);
+};
+
 module.exports.addEvent = [
+  upload.single('image_url'), // Handle single file upload
+
   body("titre")
     .isLength({ min: 3 })
     .withMessage("Title must be at least 3 characters long")
     .trim()
     .escape(),
-  body("apercu").optional().trim().escape(),
-  body("description")
-    .isLength({ min: 10 })
-    .withMessage("Description must be at least 10 characters long")
+  body("apercu")
+    .isLength({ min: 3 })
+    .withMessage("Apercu must be at least 3 characters long")
     .trim()
     .escape(),
-  body("date").isISO8601().withMessage("Date must be a valid ISO date"),
-  body("time").isISO8601().withMessage("Time must be a valid ISO time"),
-  body("lieu").optional().trim().escape(),
-  body("plan")
+  body("description")
     .optional()
-    .isJSON()
-    .withMessage("Plan must be a valid JSON format"),
+    .trim()
+    .escape(),
+  body("date_debut")
+    .isISO8601()
+    .withMessage("Date Debut must be a valid ISO date"),
+  body("date_fin")
+    .optional()
+    .custom(value => {
+      if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        throw new Error("Date Fin must be a valid ISO date");
+      }
+      return true;
+    }),
+  body("time")
+    .optional()
+    .custom(value => {
+      if (value && !validateTime(value)) {
+        throw new Error("Time must be a valid time in HH:MM format");
+      }
+      return true;
+    }),
+  body("lieu")
+    .isLength({ min: 3 })
+    .withMessage("Lieu must be at least 3 characters long")
+    .trim()
+    .escape(),
   body("observations").optional().trim().escape(),
   body("participation").optional().trim().escape(),
   body("info_add").optional().trim().escape(),
@@ -130,6 +168,7 @@ module.exports.addEvent = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array()); // Log the validation errors
       req.flash(
         "error_msg",
         errors.array().map((err) => err.msg)
@@ -141,26 +180,32 @@ module.exports.addEvent = [
       titre,
       apercu,
       description,
-      image_url,
-      date,
+      date_debut,
+      date_fin,
       time,
       lieu,
-      plan,
       observations,
       participation,
       info_add,
     } = req.body;
+
+    // Handle image URL
+    const imageUrl = req.file ? `/img/${req.file.filename}` : null;
+
+    // Set date_fin and time to null if not defined
+    const finalDateFin = date_fin ? date_fin : null;
+    const finalTime = time ? time : null;
 
     try {
       await Event.addEvent(
         titre,
         apercu,
         description,
-        image_url,
-        date,
-        time,
+        imageUrl,
+        date_debut,
+        finalDateFin,
+        finalTime,
         lieu,
-        plan,
         observations,
         participation,
         info_add
@@ -250,9 +295,9 @@ module.exports.updateEvent = [
   },
 ];
 
-// Delete an event
 module.exports.deleteEvent = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
+
   try {
     await Event.deleteEvent(id);
     req.flash("success_msg", "Event deleted successfully.");
@@ -261,5 +306,55 @@ module.exports.deleteEvent = async (req, res) => {
     console.error("Error deleting event:", err);
     req.flash("error_msg", "Error deleting event.");
     res.redirect("/events");
+  }
+};
+
+  
+
+
+// EventController.js (Controller)
+
+module.exports.updateEvent = async (req, res) => {
+  const { id } = req.params;
+  const {
+    titre,
+    apercu,
+    description,
+    date_debut,
+    date_fin,
+    time,
+    lieu,
+    observations,
+    participation,
+    info_add,
+  } = req.body;
+
+  // Log the request body for debugging
+  console.log("Request Body:", req.body);
+  
+  // Handle image URL
+  const imageUrl = req.file ? `/img/${req.file.filename}` : req.body.existing_image;
+  
+  try {
+    await Event.updateEvent(
+      id,
+      titre,
+      apercu,
+      description,
+      imageUrl,
+      date_debut,
+      date_fin,
+      time,
+      lieu,
+      observations,
+      participation,
+      info_add
+    );
+    req.flash("success_msg", "Event updated successfully.");
+    res.redirect("/events");
+  } catch (err) {
+    console.error("Error updating event:", err);
+    req.flash("error_msg", "Error updating event.");
+    res.redirect(`/modifyevent/${id}`);
   }
 };
