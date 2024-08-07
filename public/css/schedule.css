@@ -108,7 +108,7 @@
     .schedule-listing:hover .schedule-slot-title {
       color: #3b1d82; }
     .schedule-listing:nth-of-type(even) .schedule-slot-time {
-      background: #e7015e; }
+      background:  #DD6E42; }
     .schedule-listing.launce .schedule-slot-time {
       padding: 40px 28px; }
     .schedule-listing.launce .schedule-slot-title {
@@ -170,7 +170,7 @@
             height: 0;
             border-style: solid;
             border-width: 0 15px 15px 0;
-            border-color: transparent #e7015e transparent transparent;
+            border-color: transparent  #DD6E42 transparent transparent;
             position: absolute;
             left: 0;
             bottom: -15px;
@@ -188,7 +188,7 @@
             margin-bottom: 0;
             text-transform: capitalize; }
           .ts-schedule-nav ul li a.active {
-            background: #e7015e;
+            background:  #DD6E42;
             color: #fff; }
             .ts-schedule-nav ul li a.active h3 {
               color: #fff; }
@@ -199,7 +199,7 @@
     position: relative; }
     .schedule-tabs-item .schedule-listing-item .schedule-slot-time {
       font-size: 14px;
-      color: #e7015e;
+      color: #DD6E42;
       margin-bottom: 10px;
       display: block; }
     .schedule-tabs-item .schedule-listing-item .schedule-slot-title {
@@ -240,7 +240,7 @@
       width: 10px;
       height: 10px;
       content: '';
-      border: 2px solid #e7015e;
+      border: 2px solid #DD6E42;
       border-radius: 50%;
       -webkit-border-radius: 50%;
       -ms-border-radius: 50%;
@@ -266,7 +266,7 @@
       .schedule-tabs-item .schedule-listing-item.schedule-right:after {
         left: -19px; }
     .schedule-tabs-item .schedule-listing-item:hover:before {
-      background: #e7015e; }
+      background: #DD6E42; }
   
   @media (min-width: 1024px) {
     .box-style {

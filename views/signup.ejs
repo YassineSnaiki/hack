@@ -1,6 +1,7 @@
 <% if (error_msg.length > 0) { %>
 <div class="alert alert-danger"><%= error_msg %></div>
 <% } %>
+<div id="back">
 <div class="login_form">
   <form action="/signup" method="POST" class="signup-form">
     <div class="input_box">
@@ -36,7 +37,7 @@
   </form>
   <a href="/login">Already have an account? Login</a>
 </div>
-
+</div>
 <script>
   document.querySelector("form").addEventListener("submit", function (event) {
     const password = document.querySelector("#password").value;
