@@ -9,6 +9,9 @@ const passport = require("passport");
 require("./config/passport")(passport);
 const app = express();
 // server.js or app.js
+const setUserRole = require('./middlewares/role');
+
+app.use(setUserRole);
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 

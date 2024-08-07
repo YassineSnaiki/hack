@@ -46,12 +46,16 @@
       veniam alias inventore. Voluptas officia iste ea, error saepe ratione.
     </p>
     <div class="row g-4">
-      <% if (events.length > 0) { %> <% events.forEach(event => { %>
-      <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-        <img style="width: 100%; height: 180px;" src="<%=event.image_url%>"
-        class="cat-item rounded p-1 alt="">
-      </div>
-      <% }); %> <% } %>
+      <% for (let i = 1; i <= 8; i++) { %>
+        <div class="col-sm-12 col-md-3">
+          <img
+            class="img-fluid border rounded"
+            src="/img/event<%= i %>.jpg"
+            alt="Event Image <%= i %>"
+            style="width: 100%; height: auto;"
+          />
+        </div>
+      <% } %>
     </div>
   </div>
 </div>
@@ -84,7 +88,7 @@
 <!-- news End -->
 
 <!-- Jobs Start -->
-<div class="container-xxl py-5">
+<div class="container-xxl py-5" id="evenements">
   <div class="container">
     <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
       Evenements
@@ -211,12 +215,12 @@
     <div class="copyright">
       <div class="row">
         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-          &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right
+          &copy; <a class="border-bottom" href="#">SAM</a>, All Right
           Reserved.
 
           <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-          Designed By
-          <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+          <!-- Designed By
+          <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> -->
         </div>
         <div class="col-md-6 text-center text-md-end">
           <div class="footer-menu">

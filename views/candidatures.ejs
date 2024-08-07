@@ -1,0 +1,57 @@
+<!-- Candidatures Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+      <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
+        Candidatures
+      </h1>
+      <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+        <div class="tab-content">
+          <div class="tab-pane fade show p-0 active">
+            <% 
+              // Filter candidatures to only include those with status 'en attente'
+              const pendingCandidatures = candidatures.filter(candidature => candidature.statut === 'en attente');
+            %>
+            <% if (pendingCandidatures.length > 0) { %>
+              <% pendingCandidatures.forEach(candidature => { %>
+                <div class="job-item p-4 mb-4">
+                  <div class="row g-4">
+                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                      <img
+                        class="flex-shrink-0 img-fluid border rounded"
+                        src="<%= events[candidature.evenement_id].image_url %>"
+                        alt=""
+                        style="width: 80px; height: 80px"
+                      />
+                      <div class="text-start ps-4">
+                        <h5 class="mb-3"><%= events[candidature.evenement_id].titre %></h5>
+                        <p><strong>Nom de l'utilisateur:</strong> <%= userMap.get(candidature.user_id).nom %> <%= userMap.get(candidature.user_id).prenom %></p>
+                        <p><strong>Email de l'utilisateur:</strong> <%= userMap.get(candidature.user_id).email %></p>
+                        <p><strong>Nombre de visiteurs:</strong> <%= candidature.nombre_visiteur %></p>
+                        <p><strong>Commentaire:</strong> <%= candidature.commentaire %></p>
+                        <p><strong>Statut:</strong> <%= candidature.statut %></p>
+                      </div>
+                    </div>
+                    <div
+                      class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
+                    >
+                      <div class="d-flex mb-3" style="gap: 30px;">
+                        <form action="/candidature/<%= candidature.id %>/refuse" method="POST">
+                          <button type="submit" class="btn btn-danger me-2">Refuser</button>
+                        </form>
+                        <form action="/candidature/<%= candidature.id %>/accept" method="POST">
+                          <button type="submit" class="btn btn-primary">Accepter</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>Aucune candidature en attente.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Candidatures End -->

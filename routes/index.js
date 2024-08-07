@@ -62,8 +62,12 @@ router.get("/404", (req, res) => {
   res.render("404");
 });
 
-
+router.get('/candidatures', isAuthenticated, isAdmin, CandidatureController.getCandidatures);
+router.post('/candidature/:id/accept', isAuthenticated, isAdmin, CandidatureController.acceptCandidature);
+router.post('/candidature/:id/refuse', isAuthenticated, isAdmin, CandidatureController.refuseCandidature);
 router.post('/candidature/:evenement_id', isAuthenticated, CandidatureController.addCandidature);
+
+
 module.exports = router;
 
 
