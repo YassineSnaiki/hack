@@ -5,7 +5,7 @@ const CandidatureController = require("../controllers/CandidatureController");
 const { isAuthenticated, isAdmin } = require("../middlewares/auth");
 const multer = require("multer");
 const path = require("path");
-
+const sendEmail = require("../utils/sendEmail"); 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/img");
@@ -58,7 +58,7 @@ router.get("/speakers", (req, res) => {
   res.render("speakers");
 });
 
-router.get("/contact", (req, res) => {
+router.get("/contact",isAuthenticated, (req, res) => {
   res.render("contact");
 });
 
@@ -89,5 +89,19 @@ router.post(
   isAuthenticated,
   CandidatureController.addCandidature
 );
+
+
+router.post('/send-email', isAuthenticated, async (req, res) => {
+  const { subject, message } = req.body;
+
+  try {
+      await sendEmail('snaiki282@gmail.com', subject, message);
+      req.flash('success_msg', 'Votre message a été envoyé avec succès !');
+      res.redirect('/contact');
+  } catch (error) {
+      req.flash('error_msg', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.');
+      res.redirect('/contact');
+  }
+});
 
 module.exports = router;

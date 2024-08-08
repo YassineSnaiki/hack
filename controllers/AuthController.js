@@ -13,21 +13,21 @@ module.exports = {
   login: (req, res, next) => {
     passport.authenticate("local-login", (err, user, info) => {
       if (err) return next(err);
-
+  
       if (!user) {
         const errorMsg = info.message || "Login failed.";
         req.flash("error_msg", errorMsg);
         return res.redirect("/login");
       }
-
+  
       req.logIn(user, (err) => {
         if (err) return next(err);
-
+  
         if (user.role === "admin") {
           return res.redirect("/events");
         } else if (req.session.returnTo) {
           const redirectUrl = req.session.returnTo;
-          delete req.session.returnTo;
+          delete req.session.returnTo; // Clear the returnTo session after use
           return res.redirect(redirectUrl);
         } else {
           return res.redirect("/");
@@ -35,6 +35,7 @@ module.exports = {
       });
     })(req, res, next);
   },
+  
 
   showSignupPage: (req, res) => {
     res.render("signup");

@@ -47,7 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 const isAuthenticated = (req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
-  console.log("authentication :" + req.isAuthenticated());
+  
   next();
 };
 
@@ -70,6 +70,10 @@ const authRoutes = require("./routes/authRoutes");
 
 app.use("/", indexRoutes);
 app.use("/", authRoutes);
+app.use((req, res) => {
+  res.status(404).render("404");
+});
+
 
 // Start the server
 app.listen(3000, () => {

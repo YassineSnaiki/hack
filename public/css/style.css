@@ -459,16 +459,18 @@ color:#EAEAEA}
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    /* background-color: #E8DAB2; */
     backdrop-filter: blur(50px);
-     width: 80%;
-    height: 70%;
+    width: 100%;
+    height: 100%;
     padding: 10px;
     border-radius: 5px;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .image-container:hover .hover-text,

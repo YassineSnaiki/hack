@@ -2,7 +2,7 @@
 <div class="alert alert-success" id="success-alert"><%= success_msg %></div>
 <% } %>
 
- <!-- Carousel Start -->
+<!-- Carousel Start -->
 <div class="container-fluid p-0">
   <div class="owl-carousel header-carousel position-relative">
     <% if (events.length > 0) { %> <% events.forEach(event => { %>
@@ -34,30 +34,45 @@
     </div>
     <% }); %> <% } %>
   </div>
-</div> 
+</div>
 
 <!-- Category Start -->
 <div class="container-xxl py-5">
   <div class="container">
-    <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Aperçu</h1>
+    <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Apercu</h1>
     <p style="text-align: center">
-      Sustainable Agriculture Mechanization (SAM) est un projet novateur lancé par l'initiative Al Moutmir, visant à promouvoir une mécanisation agricole durable à l'échelle nationale. Ce projet s'articule autour d'une collaboration étroite avec les agriculteurs pour développer des solutions mécanisées adaptées et personnalisées pour les activités agricoles quotidiennes.
-    
-    <div class="row g-4">
-      <% if (events.length > 0) { %> 
-        <% events.forEach(event => { %>
-        <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-          <div class="image-container">
-            <img style="width: 100%; height: 180px;" src="<%= event.image_url %>" class="cat-item rounded p-1" alt="">
-            <div class="hover-text">
-              <p>Texte pour l'événement : <%= event.titre %></p>
-            </div>
-          </div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima tempora
+      cum aspernatur commodi iste ipsum, repudiandae amet quidem est. Recusandae
+      veniam alias inventore. Voluptas officia iste ea, error saepe ratione.
+    </p>
+    <% 
+    const apercu = [
+        "Salon des Tracteurs: Nouveaux modèles et technologies de tracteurs.",
+        "Journée du Laboratoire: Innovations technologiques en recherche agricole.",
+        "Démonstration de Turbines: Présentation des turbines agricoles avancées.",
+        "Exposition des Machines à Olives: Équipements modernes pour la récolte des olives.",
+        "Atelier Drones en Agriculture: Utilisation des drones pour optimiser les cultures.",
+        "Séminaire Culture en Laboratoire: Techniques et technologies en culture contrôlée.",
+        "Lancement du Site Web: Nouvelle plateforme interactive pour la mécanisation durable.",
+        "Forum Technologies Agricoles: Discussion sur les dernières avancées technologiques en agriculture."
+    ];
+%>
+<div class="row g-4">
+  <% if (events.length > 0) { %> 
+    <% events.forEach((event,i) => { %>
+    <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+      <div class="image-container">
+        <img style="width: 100%; height: 180px;" src="<%= event.image_url %>" class="cat-item rounded p-1" alt="">
+        <div class="hover-text">
+          <p><%= apercu[i] %></p>
         </div>
-        <% }); %> 
-      <% } %>
+      </div>
     </div>
-    
+    <% }); %> 
+  <% } %>
+</div>
+  </div>
+</div>
 <!-- Category End -->
 
 <!-- news Start -->
@@ -145,6 +160,7 @@
   </div>
 </div>
 <!-- Jobs End -->
+
 
 
 <!-- Back to Top -->
