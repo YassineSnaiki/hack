@@ -5,26 +5,36 @@ const Event = require("../models/Event");
 const Speaker = require("../models/Speaker");
 const Program = require("../models/Program");
 const Candidature = require("../models/Candidature");
-const multer = require('multer');
-
+const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/img');
+    cb(null, "public/img");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
-  }
+  },
 });
 
 const upload = multer({ storage: storage });
-
 
 // Show all events page
 module.exports.showEventsPage = async (req, res) => {
   try {
     const events = await Event.getAllEvents();
     res.render("events", { events });
+  } catch (err) {
+    console.error("Error fetching events:", err);
+    req.flash("error_msg", "Error fetching events.");
+    res.redirect("/");
+  }
+};
+
+module.exports.showModifyPage = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const event = await Event.getEventById(id);
+    res.render("modifyevent", { event });
   } catch (err) {
     console.error("Error fetching events:", err);
     req.flash("error_msg", "Error fetching events.");
@@ -93,18 +103,21 @@ module.exports.showEventPage = async (req, res) => {
     let candidatureExists = false;
     if (req.user) {
       const user_id = req.user.id;
-      const existingCandidature = await Candidature.getByUserIdAndEventId(user_id, id);
+      const existingCandidature = await Candidature.getByUserIdAndEventId(
+        user_id,
+        id
+      );
       candidatureExists = existingCandidature.length > 0;
     }
 
     if (event) {
-      res.render("event", { 
-        event, 
-        user: req.user, 
-        speakers, 
-        uniqueDays, 
+      res.render("event", {
+        event,
+        user: req.user,
+        speakers,
+        uniqueDays,
         dayWiseProgrammes,
-        candidatureExists // Pass the candidature status to the view
+        candidatureExists, // Pass the candidature status to the view
       });
     } else {
       req.flash("error_msg", "Event not found.");
@@ -121,7 +134,7 @@ const validateTime = (value) => {
 };
 
 module.exports.addEvent = [
-  upload.single('image_url'), // Handle single file upload
+  upload.single("image_url"), // Handle single file upload
 
   body("titre")
     .isLength({ min: 3 })
@@ -133,16 +146,13 @@ module.exports.addEvent = [
     .withMessage("Apercu must be at least 3 characters long")
     .trim()
     .escape(),
-  body("description")
-    .optional()
-    .trim()
-    .escape(),
+  body("description").optional().trim().escape(),
   body("date_debut")
     .isISO8601()
     .withMessage("Date Debut must be a valid ISO date"),
   body("date_fin")
     .optional()
-    .custom(value => {
+    .custom((value) => {
       if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
         throw new Error("Date Fin must be a valid ISO date");
       }
@@ -150,7 +160,7 @@ module.exports.addEvent = [
     }),
   body("time")
     .optional()
-    .custom(value => {
+    .custom((value) => {
       if (value && !validateTime(value)) {
         throw new Error("Time must be a valid time in HH:MM format");
       }
@@ -220,81 +230,6 @@ module.exports.addEvent = [
   },
 ];
 
-// Update an existing event
-module.exports.updateEvent = [
-  body("id").isInt().withMessage("Event ID must be a number"),
-  body("titre")
-    .isLength({ min: 3 })
-    .withMessage("Title must be at least 3 characters long")
-    .trim()
-    .escape(),
-  body("apercu").optional().trim().escape(),
-  body("description")
-    .isLength({ min: 10 })
-    .withMessage("Description must be at least 10 characters long")
-    .trim()
-    .escape(),
-  body("date").isISO8601().withMessage("Date must be a valid ISO date"),
-  body("time").isISO8601().withMessage("Time must be a valid ISO time"),
-  body("lieu").optional().trim().escape(),
-  body("plan")
-    .optional()
-    .isJSON()
-    .withMessage("Plan must be a valid JSON format"),
-  body("observations").optional().trim().escape(),
-  body("participation").optional().trim().escape(),
-  body("info_add").optional().trim().escape(),
-
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      req.flash(
-        "error_msg",
-        errors.array().map((err) => err.msg)
-      );
-      return res.redirect("/events");
-    }
-
-    const {
-      id,
-      titre,
-      apercu,
-      description,
-      image_url,
-      date,
-      time,
-      lieu,
-      plan,
-      observations,
-      participation,
-      info_add,
-    } = req.body;
-
-    try {
-      await Event.updateEvent(
-        id,
-        titre,
-        apercu,
-        description,
-        image_url,
-        date,
-        time,
-        lieu,
-        plan,
-        observations,
-        participation,
-        info_add
-      );
-      req.flash("success_msg", "Event updated successfully.");
-      res.redirect("/events");
-    } catch (err) {
-      console.error("Error updating event:", err);
-      req.flash("error_msg", "Error updating event.");
-      res.redirect("/events");
-    }
-  },
-];
-
 module.exports.deleteEvent = async (req, res) => {
   const { id } = req.params;
 
@@ -308,11 +243,6 @@ module.exports.deleteEvent = async (req, res) => {
     res.redirect("/events");
   }
 };
-
-  
-
-
-// EventController.js (Controller)
 
 module.exports.updateEvent = async (req, res) => {
   const { id } = req.params;
@@ -329,12 +259,11 @@ module.exports.updateEvent = async (req, res) => {
     info_add,
   } = req.body;
 
-  // Log the request body for debugging
-  console.log("Request Body:", req.body);
-  
   // Handle image URL
-  const imageUrl = req.file ? `/img/${req.file.filename}` : req.body.existing_image;
-  
+  const imageUrl = req.file
+    ? `/img/${req.file.filename}`
+    : req.body.existing_image;
+
   try {
     await Event.updateEvent(
       id,
