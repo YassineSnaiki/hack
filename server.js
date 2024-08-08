@@ -6,6 +6,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 
+
 require("./config/passport")(passport);
 // server.js or app.js
 const app = express();
@@ -44,9 +45,15 @@ app.use(flash());
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+const isAuthenticated = (req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  console.log("authentication :" + req.isAuthenticated());
+  next();
+};
 
 const setUserRole = require("./middlewares/role");
 app.use(setUserRole);
+app.use(isAuthenticated)
 // Connect flash
 
 // Global variables for flash messages
