@@ -5,8 +5,14 @@ const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
+
 require("./config/passport")(passport);
+// server.js or app.js
 const app = express();
+
+const methodOverride = require("method-override");
+
+app.use(methodOverride("_method"));
 
 // Import and run the database creation script
 const createDatabase = require("./scripts/create_database");
@@ -39,6 +45,8 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+const setUserRole = require("./middlewares/role");
+app.use(setUserRole);
 // Connect flash
 
 // Global variables for flash messages

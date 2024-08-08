@@ -1,16 +1,9 @@
 <!-- Header End -->
 <div class="container-xxl py-5 bg-dark page-header mb-5">
   <div class="container my-5 pt-5 pb-4">
-    <h1 class="display-3 text-white mb-3 animated slideInDown">Job List</h1>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb text-uppercase">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item text-white active" aria-current="page">
-          Job List
-        </li>
-      </ol>
-    </nav>
+    <h1 class="display-3 text-white mb-3 animated slideInDown">
+      Liste des Evenements
+    </h1>
   </div>
 </div>
 <!-- Header End -->
@@ -19,496 +12,158 @@
 <div class="container-xxl py-5">
   <div class="container">
     <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
-      Job Listing
+      Evenements
     </h1>
     <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-      <ul
-        class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5"
-      >
-        <li class="nav-item">
-          <a
-            class="d-flex align-items-center text-start mx-3 ms-0 pb-3 active"
-            data-bs-toggle="pill"
-            href="#tab-1"
-          >
-            <h6 class="mt-n1 mb-0">Featured</h6>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="d-flex align-items-center text-start mx-3 pb-3"
-            data-bs-toggle="pill"
-            href="#tab-2"
-          >
-            <h6 class="mt-n1 mb-0">Full Time</h6>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="d-flex align-items-center text-start mx-3 me-0 pb-3"
-            data-bs-toggle="pill"
-            href="#tab-3"
-          >
-            <h6 class="mt-n1 mb-0">Part Time</h6>
-          </a>
-        </li>
-      </ul>
       <div class="tab-content">
-        <div id="tab-1" class="tab-pane fade show p-0 active">
-          <% if (events.length > 0) { %> <% events.forEach(event => { %>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
+        <div class="row g-4">
+          <div class="events-container">
+            <% if (events.length > 0) { %> <% events.forEach(event => { %>
+            <a href="/modifyevent/<%=event.id%>">
+              <div class="event-item">
                 <img
-                  class="flex-shrink-0 img-fluid border rounded"
+                  class=""
                   src="<%= event.image_url %>"
-                  alt=""
-                  style="width: 80px; height: 80px"
+                  style="width: 50px; height: 50px"
                 />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3"><%= event.titre %></h5>
-                  <p><%= event.description %></p>
+                <h5 class="mb-1"><%= event.titre %></h5>
+                <p><%= event.apercu %></p>
+                <div class="d-flex align-items-center">
+                  <div class="ps-3">
+                    <small><%= event.date_debut.toDateString() %></small>
+                  </div>
                 </div>
               </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="#">Participer</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date :
-                  <%= event.date %></small
-                >
-              </div>
-            </div>
+            </a>
+            <% }) %> <% } else { %>
+            <p>No events available.</p>
+            <% } %>
           </div>
-          <% }) %> <% } else { %>
-          <p>No events available.</p>
-          <% } %>
 
-          <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a>
-        </div>
-        <div id="tab-2" class="tab-pane fade show p-0">
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-1.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
+          <button class="btn btn-primary" id="addEventBtn">
+            Ajouter Evenement
+          </button>
+
+          <!-- Hidden form for adding a new event -->
+          <div id="addEventForm" style="display: none; margin-top: 20px">
+            <form
+              action="/addevent"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <div class="form-group">
+                <label for="titre">Titre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="titre"
+                  name="titre"
+                  required
                 />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Software Engineer</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
               </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
+              <div class="form-group">
+                <label for="apercu">Apercu</label>
+                <textarea
+                  class="form-control"
+                  id="apercu"
+                  name="apercu"
+                  required
+                ></textarea>
               </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-2.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  name="description"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="image">Image</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="image_url"
+                  name="image_url"
                 />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Marketing Manager</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
               </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-3.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
+              <div class="form-group">
+                <label for="date_debut">Date Debut</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="date_debut"
+                  name="date_debut"
+                  required
                 />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Product Designer</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
               </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-4.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
+              <div class="form-group">
+                <label for="date_fin">Date Fin</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="date_fin"
+                  name="date_fin"
                 />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Creative Director</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
               </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
+              <div class="form-group">
+                <label for="time">Heure</label>
+                <input type="time" class="form-control" id="time" name="time" />
               </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-5.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
+              <div class="form-group">
+                <label for="lieu">Lieu</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lieu"
+                  name="lieu"
+                  required
                 />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Wordpress Developer</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
               </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
+              <div class="form-group">
+                <label for="observations">Observations</label>
+                <textarea
+                  class="form-control"
+                  id="observations"
+                  name="observations"
+                ></textarea>
               </div>
-            </div>
+              <div class="form-group">
+                <label for="participation">Participation</label>
+                <textarea
+                  class="form-control"
+                  id="participation"
+                  name="participation"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="info_add">Info Additionnelle</label>
+                <textarea
+                  class="form-control"
+                  id="info_add"
+                  name="info_add"
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">
+                Ajouter
+              </button>
+            </form>
           </div>
-          <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a>
-        </div>
-        <div id="tab-3" class="tab-pane fade show p-0">
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-1.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
-                />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Software Engineer</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
-              </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-2.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
-                />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Marketing Manager</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
-              </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-3.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
-                />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Product Designer</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
-              </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-4.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
-                />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Creative Director</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
-              </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <div class="job-item p-4 mb-4">
-            <div class="row g-4">
-              <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img
-                  class="flex-shrink-0 img-fluid border rounded"
-                  src="img/com-logo-5.jpg"
-                  alt=""
-                  style="width: 80px; height: 80px"
-                />
-                <div class="text-start ps-4">
-                  <h5 class="mb-3">Wordpress Developer</h5>
-                  <span class="text-truncate me-3"
-                    ><i class="fa fa-map-marker-alt text-primary me-2"></i>New
-                    York, USA</span
-                  >
-                  <span class="text-truncate me-3"
-                    ><i class="far fa-clock text-primary me-2"></i>Full
-                    Time</span
-                  >
-                  <span class="text-truncate me-0"
-                    ><i class="far fa-money-bill-alt text-primary me-2"></i>$123
-                    - $456</span
-                  >
-                </div>
-              </div>
-              <div
-                class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center"
-              >
-                <div class="d-flex mb-3">
-                  <a class="btn btn-light btn-square me-3" href=""
-                    ><i class="far fa-heart text-primary"></i
-                  ></a>
-                  <a class="btn btn-primary" href="">Apply Now</a>
-                </div>
-                <small class="text-truncate"
-                  ><i class="far fa-calendar-alt text-primary me-2"></i>Date
-                  Line: 01 Jan, 2045</small
-                >
-              </div>
-            </div>
-          </div>
-          <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a>
         </div>
       </div>
+
+      <script>
+        document
+          .getElementById("addEventBtn")
+          .addEventListener("click", function () {
+            var form = document.getElementById("addEventForm");
+            if (form.style.display === "none") {
+              form.style.display = "block";
+            } else {
+              form.style.display = "none";
+            }
+          });
+      </script>
     </div>
   </div>
 </div>
