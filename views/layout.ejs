@@ -105,6 +105,11 @@
             </div>
             <div class="nav-item dropdown"></div>
             <a href="/contact" class="nav-item nav-link">Contacts</a>
+            <%if(!isAuthenticated)  { %>
+              <a href="/login" class="nav-item nav-link">Se connecter</a>
+              <% } else { %>
+                <a href="/logout" class="nav-item nav-link">Se déconnecter</a>
+                <%}%>
           </div>
         </div>
       </nav>
