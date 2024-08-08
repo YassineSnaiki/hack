@@ -140,7 +140,7 @@
       </div>
       <!-- row end-->
       <!-- row start -->
-      <div class="row">
+      <div class="row program">
         <div class="col-lg-12">
           <div class="tab-content schedule-tabs schedule-tabs-item">
             <% uniqueDays.forEach((day, index) => { %>
@@ -184,37 +184,37 @@
 </section>
 <!-- ts schedule end-->
 <div class="">
-  <h4 class="text-center mb-4" style="margin-top: 150px;">Participer dans cet evenement</h4>
-  <form style="max-width: 500px; margin: 0 auto">
+
+  
+  <% if (success_msg.length > 0) { %>
+    <div id="success-msg" class="alert alert-success"><%= success_msg %></div>
+  <% } %>
+  <% if (error_msg.length > 0) { %>
+    <div id="error-msg" class="alert alert-danger"><%= error_msg %></div>
+  <% } %>
+  
+
+<% if (!candidatureExists) { %>
+  <h4 class="text-center mb-4">Participer à cet événement</h4>
+  <form action="/candidature/<%= event.id %>" method="POST" style="max-width: 500px; margin: 0 auto">
     <div class="row g-3">
-      <div class="col-12 col-sm-6">
-        <input type="text" class="form-control" placeholder="Your Name" />
-      </div>
-      <div class="col-12 col-sm-6">
-        <input type="email" class="form-control" placeholder="Your Email" />
-      </div>
-      <div class="col-12 col-sm-6">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Portfolio Website"
-        />
-      </div>
-      <div class="col-12 col-sm-6">
-        <input type="file" class="form-control bg-white" />
-      </div>
       <div class="col-12">
-        <textarea
-          class="form-control"
-          rows="5"
-          placeholder="Coverletter"
-        ></textarea>
+        <input type="number" class="form-control" name="num_visitors" placeholder="Nombre de visiteur" min="1" max="10" required />
       </div>
+
+      <div class="col-12">
+        <textarea name="commentaire" class="form-control" rows="5" placeholder="Commentaire"></textarea>
+      </div>
+      
       <div class="col-12">
         <button class="btn btn-primary w-100" type="submit">Participer</button>
       </div>
     </div>
   </form>
+<% } else { %>
+  <p class="text-center text-success" style="margin:  100px 0;">Vous êtes déjà inscrit à cet événement.</p>
+<% } %>
+
 </div>
 <!-- Footer Start -->
 <div
@@ -367,3 +367,23 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the success and error message elements
+    var successMsg = document.getElementById('success-msg');
+    var errorMsg = document.getElementById('error-msg');
+
+    // Function to hide the message after a delay
+    function hideMessage(element) {
+      if (element) {
+        setTimeout(function() {
+          element.style.display = 'none';
+        }, 5000); // 5000 ms = 5 seconds
+      }
+    }
+
+    // Hide messages if they exist
+    hideMessage(successMsg);
+    hideMessage(errorMsg);
+  });
+</script>

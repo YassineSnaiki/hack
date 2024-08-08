@@ -302,3 +302,9 @@
   }
 
 }
+.row.program {
+  margin-left: auto !important;
+  margin-right: auto  !important;
+  max-width: 800px;
+
+}
