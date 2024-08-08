@@ -129,6 +129,50 @@ module.exports.showEventPage = async (req, res) => {
     res.redirect("/events");
   }
 };
+module.exports.showProgramPage = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const speakers = await Speaker.getByEventId(id);
+    const programmes = await Program.getByEventId(id);
+
+    const uniqueDays = [...new Set(programmes.map((program) => program.jour))];
+
+    const dayWiseProgrammes = {};
+    for (let programme of programmes) {
+      const day = programme.jour;
+      if (!dayWiseProgrammes[day]) {
+        dayWiseProgrammes[day] = [];
+      }
+
+      const activities = programme.plan;
+      for (let activity of activities) {
+        const speaker = await Speaker.getById(activity.speaker_id);
+        dayWiseProgrammes[day].push({
+          activity: activity.activity,
+          time: activity.time,
+          speakerName: `${speaker.nom} ${speaker.prenom}`,
+          speakerImage: speaker.image_url,
+        });
+        dayWiseProgrammes[day].sort((a, b) => {
+          return (
+            new Date("1970/01/01 " + a.time) - new Date("1970/01/01 " + b.time)
+          );
+        });
+      }
+    }
+
+    res.render("program", {
+      speakers,
+      uniqueDays,
+      dayWiseProgrammes,
+    });
+  } catch (err) {
+    console.error("Error fetching program data:", err);
+    req.flash("error_msg", "Error fetching program data.");
+    res.redirect("/events");
+  }
+};
+
 const validateTime = (value) => {
   return !value || /^([01]\d|2[0-3]):([0-5]\d)$/.test(value);
 };

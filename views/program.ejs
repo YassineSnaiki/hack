@@ -1,0 +1,133 @@
+
+  <%if(uniqueDays.length>0) { %>
+  <h2 class="text-center mb-5">Schedule</h2>
+  <div class="container">
+    <!-- row start-->
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <div class="ts-schedule-nav">
+          <ul class="nav nav-tabs justify-content-center" role="tablist">
+            <% uniqueDays.forEach((day, index) => { %>
+            <li class="nav-item">
+              <a
+                class="<%= index === 0 ? 'active' : '' %>"
+                href="#date<%= index + 1 %>"
+                role="tab"
+                data-toggle="tab"
+              >
+                <h3><%= new Date(day).toLocaleDateString() %></h3>
+                <span
+                  ><%= new Date(day).toLocaleString('en-US', { weekday: 'long'
+                  }) %></span
+                >
+              </a>
+            </li>
+            <% }); %>
+          </ul>
+        </div>
+      </div>
+      <!-- col end-->
+    </div>
+    <!-- row end-->
+    <!-- row start -->
+    <div class="row program">
+      <div class="col-lg-12">
+        <div class="tab-content schedule-tabs schedule-tabs-item">
+          <% uniqueDays.forEach((day, index) => { %>
+          <div
+            role="tabpanel"
+            class="tab-pane <%= index === 0 ? 'active' : '' %>"
+            id="date<%=index+1%>"
+          >
+            <div class="row">
+              <% dayWiseProgrammes[day].forEach((programme, i) => { %>
+              <div class="col-lg-6">
+                <div
+                  class="schedule-listing-item <%= i % 2 !== 0 ? 'schedule-left' : 'schedule-right' %>"
+                >
+                  <img
+                    class="schedule-slot-speakers"
+                    src="<%= programme.speakerImage %>"
+                    alt="<%= programme.speakerName %>"
+                  />
+                  <span class="schedule-slot-time"><%= programme.time %></span>
+                  <h3 class="schedule-slot-title"><%= programme.activity %></h3>
+                  <h4 class="schedule-slot-name">
+                    @ <%= programme.speakerName %>
+                  </h4>
+                  <form action="/deleteActivity" method="POST" style="display:inline;">
+                    <input type="hidden" name="activityId" value="<%= programme.id %>">
+                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                  </form>
+                </div>
+              </div>
+              <% }) %>
+            </div>
+            <!-- row end-->
+          </div>
+          <!-- tab pane end-->
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    <!-- row end -->
+  </div>
+  <%}%>
+  <div class="container mt-5" style="text-align: center;">
+    <button class="btn btn-primary" id="addActivityBtn">
+      Ajouter Activité
+    </button>
+
+    <!-- Hidden form for adding a new activity -->
+    <div id="addActivityForm" style="display: none; margin-top: 20px;">
+      <form action="/addActivity" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="activityName">Nom d'activité</label>
+          <input type="text" class="form-control" id="activityName" name="activityName" required />
+        </div>
+        <div class="form-group">
+          <label for="speakerName">Nom du Speaker</label>
+          <input type="text" class="form-control" id="speakerName" name="speakerName" required />
+        </div>
+        <div class="form-group">
+          <label for="speakerImage">Image du Speaker</label>
+          <input type="file" class="form-control" id="speakerImage" name="speakerImage" />
+        </div>
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" class="form-control" id="date" name="date" required />
+        </div>
+        <div class="form-group">
+          <label for="time">Temps</label>
+          <input type="time" class="form-control" id="time" name="time" required />
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
+      </form>
+    </div>
+  </div>
+  <!-- Ajouter Activité section end -->
+
+</section>
+<!-- ts schedule end-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // Toggle the visibility of the "Ajouter Activité" form
+  document.getElementById('addActivityBtn').addEventListener('click', function() {
+    var form = document.getElementById('addActivityForm');
+    if (form.style.display === 'none') {
+      form.style.display = 'block';
+    } else {
+      form.style.display = 'none';
+    }
+  });
+</script>
+  <!-- container end-->
+</section>
+<!-- ts schedule end-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

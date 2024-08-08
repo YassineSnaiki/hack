@@ -28,7 +28,7 @@ router.get(
 
 // Route for rendering a specific event, requires authentication
 router.get("/event/:id", isAuthenticated, EventController.showEventPage);
-
+router.get('/modifyevent/:id/program',isAuthenticated,isAdmin, EventController.showProgramPage);
 //add event
 router.post("/addevent", EventController.addEvent);
 
@@ -103,5 +103,8 @@ router.post('/send-email', isAuthenticated, async (req, res) => {
       res.redirect('/contact');
   }
 });
+
+
+
 
 module.exports = router;
