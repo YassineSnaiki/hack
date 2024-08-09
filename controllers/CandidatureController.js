@@ -51,8 +51,9 @@ class CandidatureController {
             await Candidature.updateCandidature(id, candidature.nombre_visiteur, candidature.commentaire, 'accepte');
 
             const user = await User.findById(candidature.user_id);
+            
             if (user && user.email) {
-                await sendEmail(user.email, 'Candidature Accepted', 'Your candidature has been accepted.');
+                await sendEmail(user.email,'candidature acceptée', 'votre candidature a ete accepte');
             } else {
                 console.error('User email is not available.');
             }
@@ -80,7 +81,7 @@ class CandidatureController {
 
             const user = await User.findById(candidature.user_id);
             if (user && user.email) {
-                await sendEmail(user.email, 'Candidature Refused', 'Your candidature has been refused.');
+                await sendEmail(user.email, 'Candidature Refusée', 'votre candidature a ete refusé.');
             } else {
                 console.error('User email is not available.');
             }

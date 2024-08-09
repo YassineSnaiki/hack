@@ -1,3 +1,7 @@
+<% if (success_msg.length > 0) { %>
+    <div class="alert alert-success" id="success-alert"><%= success_msg %></div>
+    <% } %>
+
 <!-- Header End -->
 <div class="container-xxl py-5 bg-dark page-header mb-5">
     <div class="container my-5 pt-5 pb-4">
@@ -51,7 +55,15 @@
                     <!-- Existing contact page HTML -->
 
 <form action="/send-email" method="POST">
+    
     <div class="row g-3">
+        
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+                <label for="subject">Email</label>
+            </div>
+        </div>
         <div class="col-12">
             <div class="form-floating">
                 <input type="text" name="subject" class="form-control" id="subject" placeholder="Objet" required>

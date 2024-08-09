@@ -58,7 +58,7 @@ router.get("/speakers", (req, res) => {
   res.render("speakers");
 });
 
-router.get("/contact",isAuthenticated, (req, res) => {
+router.get("/contact", (req, res) => {
   res.render("contact");
 });
 
@@ -91,11 +91,12 @@ router.post(
 );
 
 
-router.post('/send-email', isAuthenticated, async (req, res) => {
-  const { subject, message } = req.body;
+router.post('/send-email',  async (req, res) => {
+  const {email, subject, message } = req.body;
+
 
   try {
-      await sendEmail('snaiki282@gmail.com', subject, message);
+      await sendEmail("snaiki282@gmail.com", subject, `[${email}] ${message}`);
       req.flash('success_msg', 'Votre message a été envoyé avec succès !');
       res.redirect('/contact');
   } catch (error) {

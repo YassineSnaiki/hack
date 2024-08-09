@@ -24,7 +24,7 @@ module.exports.showEventsPage = async (req, res) => {
     const events = await Event.getAllEvents();
     res.render("events", { events });
   } catch (err) {
-    console.error("Error fetching events:", err);
+   
     req.flash("error_msg", "Error fetching events.");
     res.redirect("/");
   }
@@ -264,7 +264,7 @@ module.exports.addEvent = [
         participation,
         info_add
       );
-      req.flash("success_msg", "Event added successfully.");
+      req.flash("success_msg", "Evenement Ajouté.");
       res.redirect("/events");
     } catch (err) {
       console.error("Error adding event:", err);
@@ -279,7 +279,7 @@ module.exports.deleteEvent = async (req, res) => {
 
   try {
     await Event.deleteEvent(id);
-    req.flash("success_msg", "Event deleted successfully.");
+    req.flash("success_msg", "Evenement supprimé.");
     res.redirect("/events");
   } catch (err) {
     console.error("Error deleting event:", err);
@@ -323,7 +323,7 @@ module.exports.updateEvent = async (req, res) => {
       participation,
       info_add
     );
-    req.flash("success_msg", "Event updated successfully.");
+    req.flash("success_msg", "Evenement modifié.");
     res.redirect("/events");
   } catch (err) {
     console.error("Error updating event:", err);
